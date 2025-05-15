@@ -26,7 +26,9 @@ To install chemford from GitHub repository, do:
 ```console
 git clone git@github.com:MatthiasWel/chemford.git
 cd chemford
-python -m pip install .
+conda env create -f environment.yaml
+conda activate chemford
+pip install .
 ```
 
 ## Documentation
