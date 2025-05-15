@@ -5,7 +5,10 @@ title: "chemford"
 authors:
   - family-names: Welsch
     given-names: Matthias
-    orcid: "https://orcid.org/0000-0000-0000-0000"
+    orcid: "https://orcid.org/0009-0007-9443-895X"
+  - family-names: Abu Shehab
+    given-names: Uday
+    orcid: "https://orcid.org/0009-0007-1146-6585"
 date-released: 2025-05-15
 version: "0.1.0"
 repository-code: "https://github.com/MatthiasWel/chemford"
