@@ -1,0 +1,28 @@
+# Changes here will be overwritten by Copier
+SelectCitation:
+- AddCitationFile_flag
+- AddCFFConvert_flag
+SelectCodeQualityFeatures:
+- AddLocalTests_flag
+- SelectGitHubActions_flag
+- AddLinting_flag
+- AddPreCommit_flag
+SelectCommunityFeatures: []
+SelectDocumentationFeatures: []
+SelectGitHubActions:
+- AddGitHubActionBuild_flag
+SelectPublishReleaseFeatures:
+- SelectCitation_flag
+_commit: 3aa1be0
+_src_path: https://github.com/wschuell/python-template.git
+copyright_holder: Matthias Welsch & Uday Abu Shehab
+email: matthias.welsch@univie.ac.at
+full_name: Matthias Welsch
+github_organization: MatthiasWel
+keywords: Benford's law, IC50, bioactivity
+license: MIT
+package_name: chemford
+package_short_description: Utilizing Benford's law to spot inconsistencies in bioactivity
+    data
+template_profile: recommended
+version: 0.1.0

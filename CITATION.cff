@@ -1,0 +1,16 @@
+# YAML 1.2
+---
+cff-version: "1.2.0"
+title: "chemford"
+authors:
+  - family-names: Welsch
+    given-names: Matthias
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+date-released: 2025-05-15
+version: "0.1.0"
+repository-code: "https://github.com/MatthiasWel/chemford"
+keywords:
+  - "Benford's law"
+  - " IC50"
+  - " bioactivity"
+message: "If you use this software, please cite it using these metadata."
