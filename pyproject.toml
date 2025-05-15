@@ -35,7 +35,6 @@ version = "0.1.0"
 qa = [
     "pre-commit>=4.2.0",
     "ruff>=0.11.10",
-    "isort>=6.0.1",
     "pytest>=8.3.5",
 ]
 
@@ -80,7 +79,7 @@ extras = dev
 """
 
 [tool.ruff]
-line-length = 79
+line-length = 88
 output-format = "concise"
 
 [tool.ruff.lint]
