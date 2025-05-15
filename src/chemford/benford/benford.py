@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def benford_first_digit_distribution() -> dict[int, float]:
     """Returns Benford's Law probability distribution for the first digit (1-9).
 
