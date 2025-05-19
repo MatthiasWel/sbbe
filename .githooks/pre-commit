@@ -6,7 +6,8 @@ echo "Script $0 triggered ..."
 echo "Starting ruff analysis..."
 
 # quietly run ruff
-pre-commit run --all
+$CONDA_PREFIX/../chemford/bin/ruff check --fix
+$CONDA_PREFIX/../chemford/bin/ruff format
 
 # use return code to abort commit if necessary
 if [ $? != "0" ]; then
