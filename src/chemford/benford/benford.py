@@ -1,4 +1,5 @@
 import numpy as np
+import Sequence
 
 def benford_first_digit_distribution() -> dict[int, float]:
     """Returns Benford's Law probability distribution for the first digit (1-9).
@@ -60,3 +61,39 @@ def benford_n_digit_distribution(n: int) -> dict[int, float]:
         )
         for d in range(10)
     }
+
+
+def has_sufficient_log_scale_coverage(data: Sequence[float], log_scale_coverage: float = 2.0) -> bool:
+    """
+    Check whether the data spans less than a specified number of orders of magnitude on a log scale.
+
+    Args:
+        data: A sequence of positive numeric values (e.g., list, numpy array, or pandas Series).
+        log_scale_coverage: The maximum allowed log scale range (in orders of magnitude).
+
+    Returns:
+        True if data covers less than the specified log scale range, False otherwise.
+    """
+    data = np.asarray(data)
+    if np.any(data <= 0):
+        raise ValueError("All values in data must be positive to compute log scale coverage.")
+
+    min_val = data.min()
+    max_val = data.max()
+    return max_val / min_val < 10 ** log_scale_coverage
+
+
+def has_sufficient_data(data: Sequence[float], threshold: int = 100) -> bool:
+    """
+    Check if the input data has a length greater than or equal to a threshold.
+
+    Args:
+        data: Any object with a defined length (e.g., list, numpy array, pandas Series).
+        threshold: Minimum number of elements required.
+
+    Returns:
+        True if length of data >= threshold, False otherwise.
+    """
+    return len(data) >= threshold
+
+
