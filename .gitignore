@@ -2,6 +2,7 @@
 *.py[cod]
 *$py.class
 __pycache__
+*ipynb
 
 # Distribution / packaging
 .Python
