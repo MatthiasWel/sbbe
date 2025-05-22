@@ -90,7 +90,8 @@ def has_sufficient_log_scale_coverage(
 
     min_val = np.min(data)
     max_val = np.max(data)
-    return max_val / min_val > 10**log_scale_coverage
+    # Sometimes standard_value in ChEMBL is negative => Return np.abs(max_val / min_val)
+    return np.abs(max_val / min_val) > 10**log_scale_coverage
 
 
 def has_sufficient_data(data: Sequence, threshold: int = 100) -> bool:
