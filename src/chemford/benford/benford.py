@@ -88,6 +88,8 @@ def has_sufficient_log_scale_coverage(
         msg = "All values in data must be positive to compute log scale coverage."
         raise ValueError(msg)
 
+    # Remove NaN values
+    data = data[~np.isnan(data)]
     min_val = np.min(data)
     max_val = np.max(data)
     # Sometimes standard_value in ChEMBL is negative => Return np.abs(max_val / min_val)
