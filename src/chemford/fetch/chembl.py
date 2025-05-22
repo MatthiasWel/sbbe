@@ -1,10 +1,10 @@
-import pandas as pd
 import sqlite3
 from pathlib import Path
+import pandas as pd
 
 CHEMBL_ACTIVITY_QUERY = """
 WITH valid_data AS (
-    SELECT molregno, assay_id, standard_type, standard_relation, 
+    SELECT molregno, assay_id, standard_type, standard_relation,
            standard_value, standard_units, pchembl_value, data_validity_comment
     FROM activities
     WHERE standard_type IN ('Kd', 'Potency', 'AC50', 'IC50', 'Ki', 'EC50')
@@ -37,22 +37,22 @@ LEFT JOIN target_dictionary USING (tid);"""
 
 CHEMBL_METADATA_QUERY = """
 SELECT DISTINCT
-    activities.activity_id,                 -- activity ID (record_id) for exact matching
+    activities.activity_id,               -- activity ID (record_id) for exact matching
     activities.molregno,
     activities.assay_id,
-    assays.tid,                             -- Target ID for additional precision
-    molecule_dictionary.chembl_id           AS molecule_id,
-    compound_structures.canonical_smiles    AS canonical_smiles,
-    compound_structures.molfile             AS molecule,
-    compound_records.compound_key           AS compound_key,
+    assays.tid,                           -- Target ID for additional precision
+    molecule_dictionary.chembl_id         AS molecule_id,
+    compound_structures.canonical_smiles  AS canonical_smiles,
+    compound_structures.molfile           AS molecule,
+    compound_records.compound_key         AS compound_key,
     docs.doc_id,
     docs.doi,
-    docs.journal                            AS journal_name,
+    docs.journal                          AS journal_name,
     docs.pubmed_id,
-    docs.title                              AS publication_title,
+    docs.title                            AS publication_title,
     docs.authors,
-    docs.year                               AS publication_year,
-    docs.doc_type                           AS document_type,
+    docs.year                             AS publication_year,
+    docs.doc_type                         AS document_type,
     docs.src_id
 
 FROM activities
@@ -66,15 +66,18 @@ WHERE activities.standard_type IN ('Kd', 'Potency', 'AC50', 'IC50', 'Ki', 'EC50'
   AND activities.standard_relation = '='
   AND activities.standard_units    = 'nM';"""
 
+
 def fetch_data_chembl(query: str, path_to_chembl: Path) -> pd.DataFrame:
-    """Fetch query from ChEMBL"""
+    """Fetch query from ChEMBL."""
     con = sqlite3.connect(path_to_chembl)
     return pd.read_sql(query, con=con)
 
+
 def fetch_activities_chembl(path_to_chembl: Path) -> pd.DataFrame:
-    """Fetch activity data from ChEMBL"""
+    """Fetch activity data from ChEMBL."""
     return fetch_data_chembl(query=CHEMBL_ACTIVITY_QUERY, path_to_chembl=path_to_chembl)
 
+
 def fetch_metadata_chembl(path_to_chembl: Path) -> pd.DataFrame:
-    """Fetch metadata from ChEMBL"""
+    """Fetch metadata from ChEMBL."""
     return fetch_data_chembl(query=CHEMBL_METADATA_QUERY, path_to_chembl=path_to_chembl)
