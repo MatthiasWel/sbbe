@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
+from matplotlib.figure import Figure
 from chemford.benford.benford import benford_first_digit_distribution
 from chemford.benford.benford import benford_first_two_digit_distribution
 from chemford.benford.benford import benford_n_digit_distribution
 from chemford.benford.benford import has_sufficient_data
 from chemford.benford.benford import has_sufficient_log_scale_coverage
+from chemford.plots.multiplot_benford import multiplot
 
 
 def test_benford_distributions():
@@ -33,7 +35,7 @@ def test_benford_distributions():
 
 
 def test_sufficiency_checks():
-    """Test sufficiency checks"""
+    """Test sufficiency checks."""
     short = np.arange(1, 100, 10)
     long = np.arange(1, 1000, 0.01)
     transforms = (pd.Series, np.array, list)
@@ -54,3 +56,43 @@ def test_sufficiency_checks():
         assert has_sufficient_log_scale_coverage(transform(good_coverage)), (
             f"{transform} failed with enough coverage"
         )
+
+
+def test_plot():
+    """Test multiplot."""
+    n = 1000
+    n_classses = 20
+    rng = np.random.default_rng()
+
+    digits = rng.integers(10, 100, size=n)
+    cls = [i % n_classses for i in range(n)]
+    tmp = pd.DataFrame({"cls": cls, "digit": digits})
+    assert isinstance(
+        multiplot(tmp, benford_first_two_digit_distribution()),
+        Figure,
+    ), "Not a figure leading two digits"
+
+    digits = rng.integers(1, 10, size=n)
+    cls = [i % n_classses for i in range(n)]
+    tmp = pd.DataFrame({"cls": cls, "digit": digits})
+    assert isinstance(
+        multiplot(tmp, benford_first_digit_distribution()),
+        Figure,
+    ), "Not a figure for first digit"
+
+    digits = rng.integers(0, 10, size=n)
+    cls = [i % n_classses for i in range(n)]
+    tmp = pd.DataFrame({"cls": cls, "digit": digits})
+    assert isinstance(
+        multiplot(tmp, benford_n_digit_distribution(2)),
+        Figure,
+    ), "Not a figure for n digit"
+
+    n_classses = 1
+    digits = rng.integers(1, 10, size=n)
+    cls = [i % n_classses for i in range(n)]
+    tmp = pd.DataFrame({"cls": cls, "digit": digits})
+    assert isinstance(
+        multiplot(tmp, benford_first_digit_distribution()),
+        Figure,
+    ), "Not a figure with 1 class (first digit)"
