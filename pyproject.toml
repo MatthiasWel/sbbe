@@ -103,6 +103,8 @@ ignore = [
     "D104", # Missing public package docstring
     "D105", # Missing docstring in magic method
     "D107", # Missing docstring in `__init__`
+    "N806", # Variable contains upper case char
+    "N802", # Function name contains upper case char
 ]
 pydocstyle.convention = "google"
 
