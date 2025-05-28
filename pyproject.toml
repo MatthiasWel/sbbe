@@ -114,6 +114,11 @@ pydocstyle.convention = "google"
     "S101",   # Use of assert is detected
 ]
 
+# https://github.com/astral-sh/ruff/issues/6474
+"tests/*" = [  # /* ensures it works for all subdirectories
+    "INP001",  # "implicit namespace package" is invalid for pytest
+]
+
 [tool.ruff.lint.isort]
 known-first-party = ["chemford"]
 force-single-line = true
