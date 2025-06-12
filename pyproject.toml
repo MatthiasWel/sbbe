@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy>=2.2.5",
+    "tqdm>=4.67.1",
     "pandas>=2.2.3",
     "notebook>=7.4.2",
     "scikit-learn>=1.6.1",
@@ -102,6 +103,8 @@ ignore = [
     "D104", # Missing public package docstring
     "D105", # Missing docstring in magic method
     "D107", # Missing docstring in `__init__`
+    "N806", # Variable contains upper case char
+    "N802", # Function name contains upper case char
 ]
 pydocstyle.convention = "google"
 
@@ -111,6 +114,11 @@ pydocstyle.convention = "google"
     "ANN201", # Missing return type annotation for public function
     "PT011",  # Missing `match` parameter in `pytest.raises()`
     "S101",   # Use of assert is detected
+]
+
+# https://github.com/astral-sh/ruff/issues/6474
+"tests/*" = [  # /* ensures it works for all subdirectories
+    "INP001",  # "implicit namespace package" is invalid for pytest
 ]
 
 [tool.ruff.lint.isort]
