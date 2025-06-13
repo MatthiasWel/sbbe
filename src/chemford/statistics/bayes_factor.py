@@ -49,3 +49,39 @@ def bayes_factor_dirichlet_multinomial(
     bf10 = np.exp(log_bf10)
 
     return bf10, log_bf10
+
+
+def bayes_factor_fixed_probas(
+    counts: Iterable[int],
+    expected_d1: Iterable[float],
+    expected_d2: Iterable[float],
+) -> tuple[float, float]:
+    """Compute the Bayes Factor comparing two fixed-probability multinomial models.
+
+    - H0: A multinomial model with fixed probabilities (`expected_d1`).
+    - H1: A multinomial model with fixed probabilities (`expected_d2`).
+
+    Parameters
+    ----------
+    counts : array-like
+        Observed counts for each category.
+    expected_d1 : array-like
+        Fixed probabilities under H0 (should sum to 1).
+    expected_d2 : array-like
+        Fixed probabilities under H1 (should sum to 1).
+
+    Returns:
+    -------
+    bf10 : float
+        Bayes Factor in favor of H1 over H0.
+    log_bf10 : float
+        Natural logarithm of the Bayes Factor.
+
+    """
+    counts = np.array(counts)
+
+    log_likelihood_H0 = np.sum(counts * np.log(expected_d1))
+    log_likelihood_H1 = np.sum(counts * np.log(expected_d2))
+
+    log_bf10 = log_likelihood_H1 - log_likelihood_H0
+    return np.exp(log_bf10), log_bf10
