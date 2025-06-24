@@ -45,10 +45,7 @@ def bayes_factor_dirichlet_multinomial(
         + np.sum(gammaln(counts + alpha_np) - gammaln(alpha_np))
     )
 
-    log_bf10 = log_marginal_H1 - log_likelihood_H0
-    bf10 = np.exp(log_bf10)
-
-    return bf10, log_bf10
+    return log_marginal_H1 - log_likelihood_H0
 
 
 def bayes_factor_fixed_probas(
