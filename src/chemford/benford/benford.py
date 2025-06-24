@@ -84,16 +84,19 @@ def has_sufficient_log_scale_coverage(
         True if data covers less than the specified log scale range, False otherwise.
     """
     data = np.asarray(data)
-    if np.any(data) <= 0:
-        msg = "All values in data must be positive to compute log scale coverage."
-        raise ValueError(msg)
-
+    
     # Remove NaN values
     data = data[~np.isnan(data)]
-    min_val = np.min(data)
-    max_val = np.max(data)
-    # Sometimes standard_value in ChEMBL is negative => Return np.abs(max_val / min_val)
-    return np.abs(max_val / min_val) > 10**log_scale_coverage
+    
+    # Remove NaN and non-positive values early
+    data = data[(data > 0) & ~np.isnan(data)]
+    if data.size == 0:
+        msg = "Data must contain at least one positive numeric value."
+        raise ValueError(msg)
+
+    # Compute log10 range directly (more robust and faster)
+    log_range = np.log10(data.max()) - np.log10(data.min())
+    return log_range > log_scale_coverage
 
 
 def has_sufficient_data(data: Sequence, threshold: int = 100) -> bool:
