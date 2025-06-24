@@ -1,16 +1,17 @@
-from typing import Sequence, Optional
-from scipy.stats import rv_discrete
-from numpy.random import Generator, default_rng
+from collections.abc import Sequence
 import numpy as np
+from numpy.random import Generator
+from numpy.random import default_rng
 from numpy.typing import NDArray
+from scipy.stats import rv_discrete
+
 
 def make_multinomial(
     outcomes: Sequence,
     probs: Sequence[float],
-    random_state: Optional[int | Generator] = None
+    random_state: int | Generator | None = None,
 ) -> rv_discrete:
-    """
-    Create a multinomial distribution from outcomes and probabilities.
+    """Create a multinomial distribution from outcomes and probabilities.
 
     Args:
         outcomes: Possible discrete outcomes.
@@ -21,21 +22,23 @@ def make_multinomial(
         A scipy.stats.rv_discrete distribution instance.
     """
     if len(outcomes) != len(probs):
-        raise ValueError("Length of outcomes and probs must match.")
+        msg = "Length of outcomes and probs must match."
+        raise ValueError(msg)
     if not np.isclose(sum(probs), 1.0, atol=1e-8):
-        raise ValueError("Probabilities must sum to 1.")
-    
+        msg = "Probabilities must sum to 1."
+        raise ValueError(msg)
+
     return rv_discrete(values=(outcomes, probs), seed=random_state)
+
 
 def sample_from_mixture(
     dist_a: rv_discrete,
     dist_b: rv_discrete,
     size: int,
     mix_ratio: float,
-    random_state: Optional[int | Generator] = None
+    random_state: int | Generator | None = None,
 ) -> NDArray:
-    """
-    Sample from a mixture of two discrete distributions.
+    """Sample from a mixture of two discrete distributions.
 
     Args:
         dist_a: First rv_discrete distribution.
@@ -48,16 +51,21 @@ def sample_from_mixture(
         A shuffled NumPy array of samples from the mixture.
     """
     if not (0 <= mix_ratio <= 1):
-        raise ValueError("mix_ratio must be between 0 and 1.")
+        msg = "mix_ratio must be between 0 and 1."
+        raise ValueError(msg)
     if size < 0:
-        raise ValueError("size must be non-negative.")
+        msg = "size must be non-negative."
+        raise ValueError(msg)
     outcomes_a = set(dist_a.xk)
     outcomes_b = set(dist_b.xk)
     if outcomes_a != outcomes_b:
-        raise ValueError(f"Distributions have different outcome spaces: {outcomes_a} vs {outcomes_b}")
+        msg = (
+            f"Distributions have different outcome spaces: {outcomes_a} vs {outcomes_b}"
+        )
+        raise ValueError(msg)
 
     rng = default_rng(random_state)
-    n_a = int(round(size * mix_ratio))
+    n_a = round(size * mix_ratio)
     n_b = size - n_a
 
     samples_a = dist_a.rvs(size=n_a, random_state=rng)
