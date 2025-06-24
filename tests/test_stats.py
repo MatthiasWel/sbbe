@@ -32,7 +32,7 @@ def test_bayes_factor_favors_H0_when_data_matches():
     """BF < 1 when counts match expected_probs (H0 is supported)."""
     counts = np.array([10, 5, 5]) * 100
     expected_probs = np.array([0.5, 0.25, 0.25])
-    bf, _ = bayes_factor_dirichlet_multinomial(counts, expected_probs)
+    bf = bayes_factor_dirichlet_multinomial(counts, expected_probs)
     assert bf < 1, (
         f"BF (currently {bf}) should favor H0 when data matches expected_probs"
     )
@@ -42,7 +42,7 @@ def test_bayes_factor_favors_H1_when_data_differs():
     """BF > 1 when counts differ from expected_probs (H1 is supported)."""
     counts = np.array([10, 10, 10]) * 100
     expected_probs = np.array([0.5, 0.25, 0.25])
-    bf, _ = bayes_factor_dirichlet_multinomial(counts, expected_probs)
+    bf= bayes_factor_dirichlet_multinomial(counts, expected_probs)
     assert bf > 1, (
         f"BF (currently {bf}) should favor H1 when data differs from expected_probs"
     )
@@ -52,8 +52,8 @@ def test_scalar_and_vector_alpha_consistency():
     """Scalar and vector alpha should yield the same BF."""
     counts = np.array([5, 5, 5]) * 100
     expected_probs = [1 / 3, 1 / 3, 1 / 3]
-    bf1, _ = bayes_factor_dirichlet_multinomial(counts, expected_probs, alpha=1.0)
-    bf2, _ = bayes_factor_dirichlet_multinomial(
+    bf1 = bayes_factor_dirichlet_multinomial(counts, expected_probs, alpha=1.0)
+    bf2 = bayes_factor_dirichlet_multinomial(
         counts,
         expected_probs,
         alpha=[1.0, 1.0, 1.0],
