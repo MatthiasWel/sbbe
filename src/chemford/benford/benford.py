@@ -83,19 +83,17 @@ def has_sufficient_log_scale_coverage(
     Returns:
         True if data covers less than the specified log scale range, False otherwise.
     """
-    data = np.asarray(data)
-    
-    # Remove NaN values
-    data = data[~np.isnan(data)]
-    
-    # Remove NaN and non-positive values early
-    data = data[(data > 0) & ~np.isnan(data)]
-    if data.size == 0:
+    data_arr = np.asarray(data)  # type: np.ndarray
+
+    # Remove NaN and non-positive values
+    data_arr = data_arr[(data_arr > 0) & ~np.isnan(data_arr)]
+
+    if data_arr.size == 0:
         msg = "Data must contain at least one positive numeric value."
         raise ValueError(msg)
 
-    # Compute log10 range directly (more robust and faster)
-    log_range = np.log10(data.max()) - np.log10(data.min())
+    # Compute log10 range
+    log_range = np.log10(np.max(data_arr)) - np.log10(np.min(data_arr))
     return log_range > log_scale_coverage
 
 
