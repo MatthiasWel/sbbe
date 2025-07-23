@@ -17,9 +17,11 @@ SELECT
     valid_data.standard_value,
     valid_data.data_validity_comment,
     assays.assay_id                     AS assay_id,
+    assays.chembl_id                    AS assay_chembl_id,
 
     assays.description                  AS assay_description,
     target_dictionary.tid               AS target_id,
+    target_dictionary.chembl_id         AS target_chembl_id,
     target_dictionary.pref_name         AS target_name,
     source.src_id                       AS src_id,
     source.src_description,
