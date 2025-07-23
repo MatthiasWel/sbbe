@@ -48,7 +48,7 @@ def estimate_mixture_ratio_from_simulation(
     probs_sum = probs.sum()
     if probs_sum == 0:
         msg = "All likelihoods are zero. Check input Bayes factor or simulation data."
-        raise RuntimeError()
+        raise RuntimeError(msg)
 
     probs /= probs_sum  
 
