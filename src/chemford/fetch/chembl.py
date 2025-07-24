@@ -36,6 +36,7 @@ SELECT
     docs.issue,
     docs.doi,
     docs.title,
+    docs.doc_type,
     docs.authors
 
 FROM valid_data
