@@ -1,6 +1,7 @@
 *ipynb
 *_ignored*
 *.csv
+*.pdf
 
 # Byte-compiled / optimized / DLL files
 *.py[cod]
