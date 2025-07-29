@@ -5,7 +5,7 @@ import pandas as pd
 CHEMBL_QUERY = """
 WITH valid_data AS (
     SELECT DISTINCT molregno, assay_id, standard_type, standard_value,
-           data_validity_comment, bao_endpoint AS bao_id, src_id
+           data_validity_comment, bao_endpoint AS bao_id, src_id, pchembl
     FROM activities
     WHERE standard_type IN ('Kd', 'Potency', 'AC50', 'IC50', 'Ki', 'EC50')
       AND standard_relation = '='
@@ -20,9 +20,15 @@ SELECT
     assays.chembl_id                    AS assay_chembl_id,
 
     assays.description                  AS assay_description,
+    assays.confidence_score,
+    assays.relationship_type,
+    assays.assay_type,
+    assays.bao_format,
     target_dictionary.tid               AS target_id,
     target_dictionary.chembl_id         AS target_chembl_id,
     target_dictionary.pref_name         AS target_name,
+    variant_sequences.variant_id,
+
     source.src_id                       AS src_id,
     source.src_description,
     source.src_comment,
@@ -42,6 +48,7 @@ SELECT
 FROM valid_data
 LEFT JOIN assays                        USING (assay_id)
 LEFT JOIN target_dictionary             USING (tid)
+LEFT JOIN variant_sequences             USING (variant_id)
 LEFT JOIN source                        USING (src_id)
 LEFT JOIN bioassay_ontology             USING (bao_id)
 LEFT JOIN docs                          USING (doc_id);"""
