@@ -80,5 +80,4 @@ def bayes_factor_fixed_probas(
     log_likelihood_H0 = np.sum(counts * np.log(expected_d1))
     log_likelihood_H1 = np.sum(counts * np.log(expected_d2))
 
-    log_bf10 = log_likelihood_H1 - log_likelihood_H0
-    return np.exp(log_bf10), log_bf10
+    return log_likelihood_H1 - log_likelihood_H0
