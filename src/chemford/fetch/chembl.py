@@ -5,7 +5,7 @@ import pandas as pd
 CHEMBL_QUERY = """
 WITH valid_data AS (
     SELECT DISTINCT molregno, assay_id, standard_type, standard_value,
-           data_validity_comment, bao_endpoint AS bao_id, src_id, pchembl
+           data_validity_comment, bao_endpoint AS bao_id, src_id, pchembl_value
     FROM activities
     WHERE standard_type IN ('Kd', 'Potency', 'AC50', 'IC50', 'Ki', 'EC50')
       AND standard_relation = '='
@@ -28,6 +28,7 @@ SELECT
     target_dictionary.chembl_id         AS target_chembl_id,
     target_dictionary.pref_name         AS target_name,
     variant_sequences.variant_id,
+    variant_sequences.accession         AS uniprot_accesion,
 
     source.src_id                       AS src_id,
     source.src_description,
