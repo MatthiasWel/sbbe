@@ -1,16 +1,15 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import gaussian_kde
-from typing import Tuple
+
 
 def estimate_mixture_ratio_from_simulation(
     simulation: pd.DataFrame,
     logBF: float,
     n_samples: int,
-    ci_level: float = 0.95
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Estimate the posterior over mixture ratios given a Bayes factor from simulation data.
+    ci_level: float = 0.95,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Estimate the posterior over mixture ratios given a Bayes factor from simulation data.
 
     Parameters:
     - simulation: DataFrame with columns ['n_samples', 'mixing_ratio', 'log_bf10']
@@ -23,7 +22,7 @@ def estimate_mixture_ratio_from_simulation(
     - probs: Posterior probabilities for each mixture ratio
     - m_vals: Corresponding mixing ratio values
     """
-    if not {'n_samples', 'mixing_ratio', 'log_bf10'}.issubset(simulation.columns):
+    if not {"n_samples", "mixing_ratio", "log_bf10"}.issubset(simulation.columns):
         msg = "Simulation DataFrame must contain 'n_samples', 'mixing_ratio', 'log_bf10' columns."
         raise ValueError(msg)
 
@@ -35,7 +34,7 @@ def estimate_mixture_ratio_from_simulation(
     likelihoods = {}
     for m_val, group in df_sub.groupby("mixing_ratio"):
         if len(group) < 2:
-            continue  
+            continue
         kde = gaussian_kde(group["log_bf10"])
         likelihoods[m_val] = kde(logBF)[0]
 
@@ -50,7 +49,7 @@ def estimate_mixture_ratio_from_simulation(
         msg = "All likelihoods are zero. Check input Bayes factor or simulation data."
         raise RuntimeError(msg)
 
-    probs /= probs_sum  
+    probs /= probs_sum
 
     sorted_idx = np.argsort(probs)[::-1]
     cum_prob = np.cumsum(probs[sorted_idx])
