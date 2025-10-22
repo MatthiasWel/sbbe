@@ -1,25 +1,21 @@
-import pandas as pd
-import numpy as np
 from collections.abc import Sequence
+import pandas as pd
 from tqdm import tqdm
-
 from chemford.benford.benford import benford_first_digit_distribution
-from chemford.simulation.distributions import make_multinomial, sample_from_mixture
+from chemford.simulation.distributions import make_multinomial
+from chemford.simulation.distributions import sample_from_mixture
 from chemford.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
 from chemford.statistics.utils import observed_frequencies
-
-
 
 
 def simulate_benford_and_uniform_mixture(
     n_replicas: int,
     sizes: Sequence[int],
-    mixing_ratios: Sequence[float]
+    mixing_ratios: Sequence[float],
 ) -> pd.DataFrame:
-    """
-    Simulate samples from a mixture of Benford's and uniform distributions,
+    """Simulate samples from a mixture of Benford's and uniform distributions,
     compute Bayes factors against Benford's law using the Dirichlet-multinomial model.
-    
+
     Parameters:
     - n_replicas: Number of repetitions for each configuration
     - sizes: List of sample sizes
@@ -28,7 +24,6 @@ def simulate_benford_and_uniform_mixture(
     Returns:
     - pd.DataFrame with columns: ['iteration', 'n_samples', 'mixing_ratio', 'log_bf10']
     """
-
     benford_outcome = benford_first_digit_distribution()
     labels = list(benford_outcome.keys())
     benford_probs = list(benford_outcome.values())
@@ -47,14 +42,17 @@ def simulate_benford_and_uniform_mixture(
                     dist_a=benford,
                     dist_b=uniform,
                     size=size,
-                    mix_ratio=mixing_ratio
+                    mix_ratio=mixing_ratio,
                 )
                 counts = observed_frequencies(sample)
                 log_bf10 = bayes_factor_dirichlet_multinomial(
                     counts,
                     benford_probs,
-                    alpha=1
+                    alpha=1,
                 )
                 result.append((replica, size, mixing_ratio, log_bf10))
 
-    return pd.DataFrame(result, columns=['iteration', 'n_samples', 'mixing_ratio', 'log_bf10'])
+    return pd.DataFrame(
+        result,
+        columns=["iteration", "n_samples", "mixing_ratio", "log_bf10"],
+    )
