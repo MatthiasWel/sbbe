@@ -1,4 +1,4 @@
-from collections.abc import Sequence
+from collections.abc import Sequence, Callable
 import pandas as pd
 from joblib import Parallel
 from joblib import delayed
@@ -6,12 +6,12 @@ from tqdm import tqdm
 from chemford.benford.benford import benford_first_digit_distribution
 from chemford.simulation.distributions import make_multinomial
 from chemford.simulation.distributions import sample_from_mixture
-from chemford.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
 from chemford.statistics.utils import observed_frequencies
 
 
 def simulate_benford_and_uniform_mixture(
     n_replicas: int,
+    statistic: Callable,
     sizes: Sequence[int],
     mixing_ratios: Sequence[float],
 ) -> pd.DataFrame:
@@ -47,12 +47,11 @@ def simulate_benford_and_uniform_mixture(
                     mix_ratio=mixing_ratio,
                 )
                 counts = observed_frequencies(sample)
-                log_bf10 = bayes_factor_dirichlet_multinomial(
+                stat = statistic(
                     counts,
-                    benford_probs,
-                    alpha=1,
+                    benford_probs
                 )
-                result.append((replica, size, mixing_ratio, log_bf10))
+                result.append((replica, size, mixing_ratio, stat))
 
     return pd.DataFrame(
         result,
@@ -62,13 +61,18 @@ def simulate_benford_and_uniform_mixture(
 
 def simulate_single_replica(
     replica: int,
+    statistic: Callable,
     sizes: Sequence[int],
     mixing_ratios: Sequence[float],
-    benford: object,
-    uniform: object,
-    benford_probs: list[float],
 ) -> list[tuple]:
     """Helper function to simulate a single replica."""
+    benford_outcome = benford_first_digit_distribution()
+    labels = list(benford_outcome.keys())
+    benford_probs = list(benford_outcome.values())
+    benford = make_multinomial(labels, benford_probs)
+
+    uniform_probs = [1 / 9] * 9
+    uniform = make_multinomial(labels, uniform_probs)
     results = []
     for size in sizes:
         for mixing_ratio in mixing_ratios:
@@ -79,17 +83,17 @@ def simulate_single_replica(
                 mix_ratio=mixing_ratio,
             )
             counts = observed_frequencies(sample)
-            log_bf10 = bayes_factor_dirichlet_multinomial(
+            stat = statistic(
                 counts,
-                benford_probs,
-                alpha=1,
+                benford_probs
             )
-            results.append((replica, size, mixing_ratio, log_bf10))
+            results.append((replica, size, mixing_ratio, stat))
     return results
 
 
 def simulate_benford_and_uniform_mixture_parallel(
     n_replicas: int,
+    statistic: Callable,
     sizes: Sequence[int],
     mixing_ratios: Sequence[float],
     n_jobs: int = -1,
@@ -102,23 +106,15 @@ def simulate_benford_and_uniform_mixture_parallel(
     - mixing_ratios: Mixture weights for Benford
     - n_jobs: Number of CPU cores (-1 = all available)
     """
-    benford_outcome = benford_first_digit_distribution()
-    labels = list(benford_outcome.keys())
-    benford_probs = list(benford_outcome.values())
-    benford = make_multinomial(labels, benford_probs)
-
-    uniform_probs = [1 / 9] * 9
-    uniform = make_multinomial(labels, uniform_probs)
+    
 
     # # Parallel execution
     results = Parallel(n_jobs=n_jobs)(  # , batch_size=1
         delayed(simulate_single_replica)(
             replica,
+            statistic,
             sizes,
-            mixing_ratios,
-            benford,
-            uniform,
-            benford_probs,
+            mixing_ratios
         )
         for replica in tqdm(range(n_replicas), desc="Simulating: ")
     )
