@@ -1,13 +1,6 @@
-from collections.abc import Sequence
 from decimal import Decimal
 from decimal import InvalidOperation
 from decimal import getcontext
-import numpy as np
-
-
-
-
-
 
 def extract_significant_digits(
     num: float,
