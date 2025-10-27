@@ -4,19 +4,19 @@ from numpy.typing import NDArray
 
 
 def convert_to_log_space(
-    nM_values: Sequence[float] | NDArray,
+    values: Sequence[float] | NDArray,
 ) -> NDArray:
     """Convert nanomolar (nM) activity values (e.g., IC50, Ki, EC50) to pActivity.
 
     pActivity = -log10(value in molar units)
 
     Args:
-        nM_values: Activity values in nanomolar units (list, tuple, or NumPy array).
+        values: Activity values in nanomolar units (list, tuple, or NumPy array).
 
     Returns:
         A NumPy array of pActivity values.
     """
-    arr = np.asarray(nM_values, dtype=float)
+    arr = np.asarray(values, dtype=float)
     if np.any(arr <= 0):
         msg = "All activity values must be positive."
         raise ValueError(msg)
