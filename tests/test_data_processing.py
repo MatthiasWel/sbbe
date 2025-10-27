@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
-from chemford.data_processing.benford_criteria import has_sufficient_data, has_sufficient_log_scale_coverage
+from chemford.data_processing.benford_criteria import has_sufficient_data
+from chemford.data_processing.benford_criteria import has_sufficient_log_scale_coverage
+
 
 def test_sufficiency_checks():
     """Test sufficiency checks."""

@@ -1,4 +1,8 @@
 from chemford.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
-from chemford.statistics.edf_tests import ks_d, kuipers_v
-from chemford.statistics.xi_squared import xi_squared_counts, xi_squared_proportions
-from chemford.statistics.specialized_statistics import euclidean_distance_cho_gains, max_l1_distance_leemis, max_l1_distance_morrow
+from chemford.statistics.edf_tests import ks_d
+from chemford.statistics.edf_tests import kuipers_v
+from chemford.statistics.specialized_statistics import euclidean_distance_cho_gains
+from chemford.statistics.specialized_statistics import max_l1_distance_leemis
+from chemford.statistics.specialized_statistics import max_l1_distance_morrow
+from chemford.statistics.xi_squared import xi_squared_counts
+from chemford.statistics.xi_squared import xi_squared_proportions

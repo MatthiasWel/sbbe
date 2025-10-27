@@ -2,6 +2,7 @@ from decimal import Decimal
 from decimal import InvalidOperation
 from decimal import getcontext
 
+
 def extract_significant_digits(
     num: float,
     start: int = 1,

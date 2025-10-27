@@ -1,6 +1,6 @@
+from collections.abc import Sequence
 import numpy as np
 
-from collections.abc import Sequence
 
 def has_sufficient_log_scale_coverage(
     data: Sequence,

@@ -4,6 +4,7 @@ from numpy.random import default_rng
 from numpy.typing import NDArray
 from scipy.stats import rv_discrete
 
+
 def sample_from_mixture(
     dist_a: rv_discrete,
     dist_b: rv_discrete,

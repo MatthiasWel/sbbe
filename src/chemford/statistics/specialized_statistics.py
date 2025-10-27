@@ -1,6 +1,6 @@
+from collections.abc import Iterable
 import numpy as np
 
-from collections.abc import Iterable
 
 def max_l1_distance_leemis(
     counts: Iterable[int],
@@ -10,7 +10,8 @@ def max_l1_distance_leemis(
     n = np.sum(counts)
     observed_proportions = counts / n
     return np.max(np.abs(observed_proportions - expected_probs))
-    
+
+
 def max_l1_distance_morrow(
     counts: Iterable[int],
     expected_probs: Iterable[float],
@@ -18,6 +19,7 @@ def max_l1_distance_morrow(
     counts = np.array(counts)
     n = np.sum(counts)
     return np.sqrt(n) * max_l1_distance_leemis(counts, expected_probs)
+
 
 def euclidean_distance_cho_gains(
     counts: Iterable[int],

@@ -1,4 +1,3 @@
-
 def empirical_distribution_round_to_one_significant_digit() -> dict[int, float]:
     """Return the empirical probability distribution of first digits
     after rounding bioactivity values to one significant digit in the

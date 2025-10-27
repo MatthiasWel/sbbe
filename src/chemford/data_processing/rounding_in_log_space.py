@@ -2,6 +2,7 @@ from collections.abc import Sequence
 import numpy as np
 from numpy.typing import NDArray
 
+
 def convert_to_log_space(
     nM_values: Sequence[float] | NDArray,
 ) -> NDArray:
@@ -21,6 +22,7 @@ def convert_to_log_space(
         raise ValueError(msg)
 
     return -np.log10(arr * 1e-9)
+
 
 def round_to_decimal(
     values: Sequence[float] | NDArray,

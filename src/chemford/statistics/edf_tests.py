@@ -1,7 +1,5 @@
-import numpy as np
-
 from collections.abc import Iterable
-
+import numpy as np
 
 
 def cdf_difference(counts, expected_probs):
@@ -14,12 +12,14 @@ def cdf_difference(counts, expected_probs):
     cdf_diff = ecdf - tcdf
     return cdf_diff
 
+
 def ks_d(
     counts: Iterable[int],
     expected_probs: Iterable[float],
 ) -> float:
     cdf_diff = cdf_difference(counts, expected_probs)
     return np.max(np.abs(cdf_diff))
+
 
 def kuipers_v(
     counts: Iterable[int],

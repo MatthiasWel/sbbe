@@ -12,8 +12,8 @@ def estimate_mixture_ratio_from_simulation(
     """Estimate the posterior over mixture ratios given a Bayes factor from simulation data.
 
     Parameters:
-    - simulation: DataFrame with columns ['n_samples', 'mixing_ratio', 'log_bf10']
-    - logBF: Observed log Bayes factor
+    - simulation: DataFrame with columns ['n_samples', 'mixing_ratio', 'value']
+    - stat: Observed statistic
     - n_samples: Sample size for which the estimation is performed
     - ci_level: Confidence level for the credible interval (default 0.95)
 
@@ -22,8 +22,8 @@ def estimate_mixture_ratio_from_simulation(
     - probs: Posterior probabilities for each mixture ratio
     - m_vals: Corresponding mixing ratio values
     """
-    if not {"n_samples", "mixing_ratio", "log_bf10"}.issubset(simulation.columns):
-        msg = "Simulation DataFrame must contain 'n_samples', 'mixing_ratio', 'log_bf10' columns."
+    if not {"n_samples", "mixing_ratio", "value"}.issubset(simulation.columns):
+        msg = "Simulation DataFrame must contain 'n_samples', 'mixing_ratio', 'value' columns."
         raise ValueError(msg)
 
     df_sub = simulation[simulation["n_samples"] == n_samples]
@@ -35,7 +35,7 @@ def estimate_mixture_ratio_from_simulation(
     for m_val, group in df_sub.groupby("mixing_ratio"):
         if len(group) < 2:
             continue
-        kde = gaussian_kde(group["log_bf10"])
+        kde = gaussian_kde(group["value"])
         likelihoods[m_val] = kde(stat)[0]
 
     if not likelihoods:

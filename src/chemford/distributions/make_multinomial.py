@@ -3,6 +3,7 @@ import numpy as np
 from numpy.random import Generator
 from scipy.stats import rv_discrete
 
+
 def make_multinomial(
     outcomes: Sequence,
     probs: Sequence[float],

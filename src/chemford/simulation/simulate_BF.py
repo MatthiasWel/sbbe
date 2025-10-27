@@ -1,12 +1,15 @@
-from collections.abc import Sequence, Callable
+from collections.abc import Callable
+from collections.abc import Sequence
 import pandas as pd
 from joblib import Parallel
 from joblib import delayed
 from tqdm import tqdm
-from chemford.distributions import make_benford, make_uniform
+from chemford.distributions import make_benford
+from chemford.distributions import make_uniform
 from chemford.distributions.benford import benford_first_digit_distribution
 from chemford.simulation.sample_from_mixture import sample_from_mixture
 from chemford.statistics.utils import observed_frequencies
+
 
 def simulate_single_replica(
     replica: int,
@@ -15,8 +18,8 @@ def simulate_single_replica(
     mixing_ratios: Sequence[float],
 ) -> list[tuple]:
     """Helper function to simulate a single replica."""
-    benford_probs = benford_first_digit_distribution().values()
-    
+    benford_probs = list(benford_first_digit_distribution().values())
+
     benford = make_benford()
     uniform = make_uniform()
     results = []
@@ -29,10 +32,7 @@ def simulate_single_replica(
                 mix_ratio=mixing_ratio,
             )
             counts = observed_frequencies(sample)
-            stat = statistic(
-                counts,
-                benford_probs
-            )
+            stat = statistic(counts, benford_probs)
             results.append((replica, size, mixing_ratio, stat))
     return results
 
@@ -53,12 +53,7 @@ def simulate_benford_and_uniform_mixture(
     - n_jobs: Number of CPU cores (-1 = all available)
     """
     results = Parallel(n_jobs=n_jobs)(  # , batch_size=1
-        delayed(simulate_single_replica)(
-            replica,
-            statistic,
-            sizes,
-            mixing_ratios
-        )
+        delayed(simulate_single_replica)(replica, statistic, sizes, mixing_ratios)
         for replica in tqdm(range(n_replicas), desc="Simulating: ")
     )
 

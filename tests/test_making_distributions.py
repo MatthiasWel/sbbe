@@ -1,8 +1,10 @@
-import pytest
 import numpy as np
-
-from chemford.distributions import make_multinomial, make_benford, make_uniform
+import pytest
 from scipy.stats import rv_discrete
+from chemford.distributions import make_benford
+from chemford.distributions import make_multinomial
+from chemford.distributions import make_uniform
+
 
 def test_make_multinomial_basic():
     """Test return type and sampling.
@@ -34,14 +36,12 @@ def test_make_multinomial_probs_not_summing_to_one():
         make_multinomial([1, 2, 3], [0.1, 0.2, 0.6], random_state=0)
 
 
-
 def test_make_benford():
     """Test that the output has 9 digits (1-9) as support."""
     dist = make_benford(random_state=42)
     assert len(dist.xk) == 9, "Supported on 9 elements"
     assert all(d in range(1, 10) for d in dist.xk), "Supported on 1-9"
     assert isinstance(dist, rv_discrete), "Is a rv_discrete"
-
 
 
 def test_make_uniform():
