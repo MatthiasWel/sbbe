@@ -10,8 +10,11 @@ from chemford.distributions.rounded_distributions import (
 
 
 def assess_basic_distribution_correctness(
-    distribution, distribution_name, expected_value_of_entries,
+    distribution: dict,
+    distribution_name: str,
+    expected_value_of_entries: int,
 ):
+    """Test helper to verify basic properties of a distribution dictionary."""
     assert isinstance(distribution, dict), f"{distribution_name} is no dict"
     assert len(distribution) == expected_value_of_entries, (
         f"{distribution_name} does not have appropriate number of entries"
@@ -38,7 +41,7 @@ def test_benford_distributions():
 
 
 def test_rounded_distributions():
-    """Test rounded distributions"""
+    """Test rounded distributions."""
     expected_value = 9
 
     to_one = empirical_distribution_round_to_one_significant_digit()

@@ -116,6 +116,10 @@ pydocstyle.convention = "google"
     "S101",   # Use of assert is detected
 ]
 
+"__init__.py" = [
+    "F401", # imported but unused
+]
+
 # https://github.com/astral-sh/ruff/issues/6474
 "tests/*" = [  # /* ensures it works for all subdirectories
     "INP001",  # "implicit namespace package" is invalid for pytest

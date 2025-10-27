@@ -1,7 +1,8 @@
 def empirical_distribution_round_to_one_significant_digit() -> dict[int, float]:
-    """Return the empirical probability distribution of first digits
-    after rounding bioactivity values to one significant digit in the
-    log scale.
+    """Return the empirical probability distribution of first digits.
+
+    This distribution is computed after rounding bioactivity values
+    to one significant digit in the log scale.
 
     Returns:
         dict: Mapping of first digit (1 to 9) to its probability (0.0 to 1.0).
@@ -20,9 +21,10 @@ def empirical_distribution_round_to_one_significant_digit() -> dict[int, float]:
 
 
 def empirical_distribution_round_to_step_0_05() -> dict[int, float]:
-    """Return the empirical probability distribution of first digits
-    after rounding bioactivity values to 0.05 increments in the log
-    scale.
+    """Return the empirical probability distribution of first digits.
+
+    This distribution is computed after rounding bioactivity values
+    to 0.05 increments in the log scale.
 
     Returns:
         dict: Mapping of first digit (1 to 9) to its probability (0.0 to 1.0).

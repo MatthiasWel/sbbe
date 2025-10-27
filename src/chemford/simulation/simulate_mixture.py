@@ -8,7 +8,7 @@ from chemford.distributions import make_benford
 from chemford.distributions import make_uniform
 from chemford.distributions.benford import benford_first_digit_distribution
 from chemford.simulation.sample_from_mixture import sample_from_mixture
-from chemford.statistics.utils import observed_frequencies
+from chemford.data_processing.observed_frequencies import observed_frequencies
 
 
 def simulate_single_replica(

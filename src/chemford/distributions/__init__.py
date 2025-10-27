@@ -1,3 +1,3 @@
-from chemford.distributions.make_multinomial_benford import make_benford
 from chemford.distributions.make_general_multinomial import make_multinomial
+from chemford.distributions.make_multinomial_benford import make_benford
 from chemford.distributions.make_multinomial_uniform import make_uniform

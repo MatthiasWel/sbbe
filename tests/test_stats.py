@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
+from chemford.data_processing.observed_frequencies import observed_frequencies
 from chemford.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
-from chemford.statistics.utils import observed_frequencies
 
 
 def test_basic_counts():

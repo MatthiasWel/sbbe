@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
 import pytest
+from chemford.data_processing.observed_frequencies import observed_frequencies
 from chemford.distributions import make_multinomial
 from chemford.distributions.benford import benford_first_digit_distribution
 from chemford.simulation.estimate_mixture_ratio import (
     estimate_mixture_ratio_from_simulation,
 )
 from chemford.simulation.sample_from_mixture import sample_from_mixture
-from chemford.simulation.simulate_BF import simulate_benford_and_uniform_mixture
+from chemford.simulation.simulate_mixture import simulate_benford_and_uniform_mixture
 from chemford.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
-from chemford.statistics.utils import observed_frequencies
 
 
 def test_sample_from_mixture_basic():

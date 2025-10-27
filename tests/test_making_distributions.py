@@ -39,7 +39,8 @@ def test_make_multinomial_probs_not_summing_to_one():
 def test_make_benford():
     """Test that the output has 9 digits (1-9) as support."""
     dist = make_benford(random_state=42)
-    assert len(dist.xk) == 9, "Supported on 9 elements"
+    support_on_digits = 9
+    assert len(dist.xk) == support_on_digits, "Supported on 9 elements"
     assert all(d in range(1, 10) for d in dist.xk), "Supported on 1-9"
     assert isinstance(dist, rv_discrete), "Is a rv_discrete"
 
@@ -47,6 +48,7 @@ def test_make_benford():
 def test_make_uniform():
     """Test that the output has 9 digits (1-9) as support."""
     dist = make_uniform(random_state=42)
-    assert len(dist.xk) == 9, "Supported on 9 elements"
+    support_on_digits = 9
+    assert len(dist.xk) == support_on_digits, "Supported on 9 elements"
     assert all(d in range(1, 10) for d in dist.xk), "Supported on 1-9"
     assert isinstance(dist, rv_discrete), "Is a rv_discrete"

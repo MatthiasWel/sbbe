@@ -9,7 +9,7 @@ def estimate_mixture_ratio_from_simulation(
     n_samples: int,
     ci_level: float = 0.95,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Estimate the posterior over mixture ratios given a Bayes factor from simulation data.
+    """Estimate the posterior from simulation data.
 
     Parameters:
     - simulation: DataFrame with columns ['n_samples', 'mixing_ratio', 'value']
@@ -23,7 +23,10 @@ def estimate_mixture_ratio_from_simulation(
     - m_vals: Corresponding mixing ratio values
     """
     if not {"n_samples", "mixing_ratio", "value"}.issubset(simulation.columns):
-        msg = "Simulation DataFrame must contain 'n_samples', 'mixing_ratio', 'value' columns."
+        msg = (
+            "Simulation DataFrame must contain "
+            "'n_samples', 'mixing_ratio', 'value' columns."
+        )
         raise ValueError(msg)
 
     df_sub = simulation[simulation["n_samples"] == n_samples]
@@ -32,8 +35,9 @@ def estimate_mixture_ratio_from_simulation(
         raise ValueError(msg)
 
     likelihoods = {}
+    min_samples_for_kde = 2
     for m_val, group in df_sub.groupby("mixing_ratio"):
-        if len(group) < 2:
+        if len(group) < min_samples_for_kde:
             continue
         kde = gaussian_kde(group["value"])
         likelihoods[m_val] = kde(stat)[0]
