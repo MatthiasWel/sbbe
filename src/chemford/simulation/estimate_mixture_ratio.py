@@ -5,7 +5,7 @@ from scipy.stats import gaussian_kde
 
 def estimate_mixture_ratio_from_simulation(
     simulation: pd.DataFrame,
-    logBF: float,
+    stat: float,
     n_samples: int,
     ci_level: float = 0.95,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -36,7 +36,7 @@ def estimate_mixture_ratio_from_simulation(
         if len(group) < 2:
             continue
         kde = gaussian_kde(group["log_bf10"])
-        likelihoods[m_val] = kde(logBF)[0]
+        likelihoods[m_val] = kde(stat)[0]
 
     if not likelihoods:
         msg = "No valid likelihood estimates; not enough data per mixture ratio."
