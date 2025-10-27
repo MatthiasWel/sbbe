@@ -1,4 +1,4 @@
-from chemford.distributions.make_multinomial import make_multinomial
+from chemford.distributions.make_general_multinomial import make_multinomial
 
 
 def make_uniform(random_state=None):

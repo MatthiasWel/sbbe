@@ -1,5 +1,5 @@
 from chemford.distributions.benford import benford_first_digit_distribution
-from chemford.distributions.make_multinomial import make_multinomial
+from chemford.distributions.make_general_multinomial import make_multinomial
 
 
 def make_benford(random_state=None):
