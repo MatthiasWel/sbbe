@@ -48,6 +48,7 @@ def simulate_benford_and_uniform_mixture(
 
     Parameters:
     - n_replicas: Number of repetitions for each configuration
+    - statistic: Function to calculate the statistic
     - sizes: List of sample sizes
     - mixing_ratios: Mixture weights for Benford
     - n_jobs: Number of CPU cores (-1 = all available)
