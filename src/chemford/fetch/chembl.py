@@ -24,9 +24,24 @@ SELECT
     assays.relationship_type,
     assays.assay_type,
     assays.bao_format,
+    assays.assay_strain                 AS assay_strain,
+    assays.variant_id                   AS variant_id,
+    assays.assay_category,
+    assays.assay_tax_id,
+    assays.assay_tissue,
+    assays.assay_cell_type,
+    assays.assay_subcellular_fraction,
+    assays.src_assay_id,
+    assays.curated_by,
+    assays.aidx,
+    assays.assay_group,
+    
     target_dictionary.tid               AS target_id,
     target_dictionary.chembl_id         AS target_chembl_id,
     target_dictionary.pref_name         AS target_name,
+    target_dictionary.organism          AS organism,
+    target_dictionary.target_type       AS target_type,
+    
     variant_sequences.variant_id,
     variant_sequences.accession         AS uniprot_accesion,
 
@@ -34,8 +49,10 @@ SELECT
     source.src_description,
     source.src_comment,
     source.src_short_name,
+    
     bioassay_ontology.bao_id            AS bao_id,
     bioassay_ontology.label             AS bao_label,
+    
     docs.doc_id,
     docs.journal,
     docs.year,
