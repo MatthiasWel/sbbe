@@ -13,6 +13,8 @@ WITH valid_data AS (
 )
 SELECT
     valid_data.molregno                 AS molecule_id,
+    valid_data.src_id,
+    valid_data.pchembl_value,
     valid_data.standard_type,
     valid_data.standard_value,
     valid_data.data_validity_comment,
