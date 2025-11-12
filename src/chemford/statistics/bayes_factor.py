@@ -8,7 +8,7 @@ def bayes_factor_dirichlet_multinomial(
     expected_probs: Iterable[float],
     alpha: Iterable[float] | float = 1.0,
 ) -> tuple[float, float]:
-    """Compute the Bayes Factor comparing two models for observed count data.
+    """Compute the log Bayes Factor comparing two models for observed count data.
 
     - H0: A multinomial model with fixed probabilities (`expected_probs`).
     - H1: A multinomial model with a Dirichlet prior
@@ -26,8 +26,6 @@ def bayes_factor_dirichlet_multinomial(
 
     Returns:
     -------
-    bf10 : float
-        Bayes Factor in favor of H1 over H0.
     log_bf10 : float
         Natural logarithm of the Bayes Factor.
     """
@@ -53,7 +51,7 @@ def bayes_factor_fixed_probas(
     expected_d1: Iterable[float],
     expected_d2: Iterable[float],
 ) -> tuple[float, float]:
-    """Compute the Bayes Factor comparing two fixed-probability multinomial models.
+    """Compute the log Bayes Factor comparing two fixed-probability multinomial models.
 
     - H0: A multinomial model with fixed probabilities (`expected_d1`).
     - H1: A multinomial model with fixed probabilities (`expected_d2`).
@@ -69,8 +67,6 @@ def bayes_factor_fixed_probas(
 
     Returns:
     -------
-    bf10 : float
-        Bayes Factor in favor of H1 over H0.
     log_bf10 : float
         Natural logarithm of the Bayes Factor.
 
