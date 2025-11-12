@@ -18,7 +18,7 @@ SELECT
     valid_data.standard_type,
     valid_data.standard_value,
     valid_data.data_validity_comment,
-    
+
     assays.assay_id                     AS assay_id,
     assays.chembl_id                    AS assay_chembl_id,
     assays.description                  AS assay_description,
@@ -37,13 +37,13 @@ SELECT
     assays.curated_by,
     assays.aidx,
     assays.assay_group,
-    
+
     target_dictionary.tid               AS target_id,
     target_dictionary.chembl_id         AS target_chembl_id,
     target_dictionary.pref_name         AS target_name,
     target_dictionary.organism          AS organism,
     target_dictionary.target_type       AS target_type,
-    
+
     variant_sequences.variant_id,
     variant_sequences.accession         AS uniprot_accesion,
 
@@ -51,10 +51,10 @@ SELECT
     source.src_description,
     source.src_comment,
     source.src_short_name,
-    
+
     bioassay_ontology.bao_id            AS bao_id,
     bioassay_ontology.label             AS bao_label,
-    
+
     docs.doc_id,
     docs.journal,
     docs.year,
