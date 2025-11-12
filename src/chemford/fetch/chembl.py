@@ -18,9 +18,9 @@ SELECT
     valid_data.standard_type,
     valid_data.standard_value,
     valid_data.data_validity_comment,
+    
     assays.assay_id                     AS assay_id,
     assays.chembl_id                    AS assay_chembl_id,
-
     assays.description                  AS assay_description,
     assays.confidence_score,
     assays.relationship_type,
