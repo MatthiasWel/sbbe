@@ -7,7 +7,7 @@ def bayes_factor_dirichlet_multinomial(
     counts: Iterable[int],
     expected_probs: Iterable[float],
     alpha: Iterable[float] | float = 1.0,
-) -> tuple[float, float]:
+) -> float:
     """Compute the Bayes Factor comparing two models for observed count data.
 
     - H0: A multinomial model with fixed probabilities (`expected_probs`).
@@ -52,7 +52,7 @@ def bayes_factor_fixed_probas(
     counts: Iterable[int],
     expected_d1: Iterable[float],
     expected_d2: Iterable[float],
-) -> tuple[float, float]:
+) -> float:
     """Compute the Bayes Factor comparing two fixed-probability multinomial models.
 
     - H0: A multinomial model with fixed probabilities (`expected_d1`).
