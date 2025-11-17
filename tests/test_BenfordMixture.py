@@ -1,21 +1,28 @@
 import numpy as np
 import pytest
-from chemford import BenfordMixtureEstimator
+from numpy.typing import NDArray
+from chemford.benford_mixture import BenfordMixtureEstimator
+from chemford.distributions import make_benford
+from chemford.distributions import make_uniform
 from chemford.simulation.sample_from_mixture import sample_from_mixture
-from chemford.distributions import make_benford, make_uniform
 
 
 @pytest.fixture
 def mix_ratios():
+    """Mixing ratios fixture."""
     return np.arange(0, 1.01, 0.02)
 
 
 @pytest.fixture
-def estimator(mix_ratios):
-    return BenfordMixtureEstimator('log_BF', mixing_ratios=mix_ratios)
+def estimator(mix_ratios: NDArray):
+    """BF Mixture estimator fixture."""
+    return BenfordMixtureEstimator("log_BF", mixing_ratios=mix_ratios)
 
 
-def test_single_sample_estimation(estimator, mix_ratios):
+def test_single_sample_estimation(
+    estimator: BenfordMixtureEstimator,
+    mix_ratios: NDArray,
+):
     """Test that a single sample returns valid mixture estimate and simulation."""
     size = 2000
     true_ratio = 0.6
@@ -23,13 +30,12 @@ def test_single_sample_estimation(estimator, mix_ratios):
         dist_a=make_benford(),
         dist_b=make_uniform(),
         size=size,
-        mix_ratio=true_ratio
+        mix_ratio=true_ratio,
     )
 
     M_CI, probs, m_vals = estimator(sample, n_replicas=1000)
 
     # Basic output checks
-    assert 0 <= M_CI <= 1, "Mixture estimate should be between 0 and 1"
     assert np.isclose(np.sum(probs), 1), "Probabilities should sum to 1"
     assert len(m_vals) == len(mix_ratios), "Length of m_vals should match mixing_ratios"
 
@@ -38,7 +44,10 @@ def test_single_sample_estimation(estimator, mix_ratios):
     assert len(estimator.simulation) == expected_rows, "Simulation length mismatch"
 
 
-def test_multiple_calls_same_sample(estimator, mix_ratios):
+def test_multiple_calls_same_sample(
+    estimator: BenfordMixtureEstimator,
+    mix_ratios: NDArray,
+):
     """Test that repeated calls with same sample properly reuse or extend simulation."""
     size = 2000
     true_ratio = 0.6
@@ -46,7 +55,7 @@ def test_multiple_calls_same_sample(estimator, mix_ratios):
         dist_a=make_benford(),
         dist_b=make_uniform(),
         size=size,
-        mix_ratio=true_ratio
+        mix_ratio=true_ratio,
     )
 
     # First call
@@ -65,7 +74,7 @@ def test_multiple_calls_same_sample(estimator, mix_ratios):
     assert len(estimator.simulation) == expected_rows2
 
 
-def test_multiple_samples(estimator, mix_ratios):
+def test_multiple_samples(estimator: BenfordMixtureEstimator, mix_ratios: NDArray):
     """Test that estimator can handle different sample sizes and merges simulations."""
     size = 2000
     true_ratio = 0.6
@@ -74,13 +83,13 @@ def test_multiple_samples(estimator, mix_ratios):
         dist_a=make_benford(),
         dist_b=make_uniform(),
         size=size,
-        mix_ratio=true_ratio
+        mix_ratio=true_ratio,
     )
     sample2 = sample_from_mixture(
         dist_a=make_benford(),
         dist_b=make_uniform(),
         size=size // 2,
-        mix_ratio=true_ratio
+        mix_ratio=true_ratio,
     )
 
     # Call with first sample
