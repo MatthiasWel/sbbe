@@ -1,8 +1,14 @@
+import warnings
 from collections.abc import Callable
 from typing import ClassVar
 import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
+from chemford.data_processing.benford_criteria import has_sufficient_data
+from chemford.data_processing.benford_criteria import has_sufficient_log_scale_coverage
+from chemford.data_processing.extract_significant_digit import (
+    extract_significant_digits,
+)
 from chemford.data_processing.observed_frequencies import observed_frequencies
 from chemford.distributions import make_benford
 from chemford.simulation.estimate_mixture_ratio import (
@@ -19,10 +25,13 @@ from chemford.statistics.xi_squared import xi_squared_counts
 from chemford.statistics.xi_squared import xi_squared_proportions
 
 
+class InsufficientDataError(Exception):
+    """Raised when the dataset is too small or has insufficient log coverage."""
+
+
 class BenfordMixtureEstimator:
-    
-    """Estimate the mixture ratio of Benford-conforming vs. uniform data in a dataset
-    using simulation-based calibration and a chosen test statistic.
+    """Estimate the mixture ratio of Benford-conforming vs. uniform data in a dataset.
+
     The estimator maintains a cumulative simulation DataFrame and reuses
     simulations where possible to avoid unnecessary recalculation.
     """
@@ -42,6 +51,7 @@ class BenfordMixtureEstimator:
         self,
         statistic: str | Callable[..., float],
         mixing_ratios: NDArray | None = None,
+        ignore_invalid: bool = False,
     ):
         """Initialize a BenfordMixtureEstimator.
 
@@ -63,6 +73,7 @@ class BenfordMixtureEstimator:
         self.simulation = pd.DataFrame()
         self.benford = make_benford()
         self.benford_probs = self.benford.pk
+        self.ignore_invalid = ignore_invalid
 
     def __call__(self, data: NDArray, n_replicas: int = 1000):
         """Estimate the Benford-uniform mixture ratio for the given dataset.
@@ -84,7 +95,37 @@ class BenfordMixtureEstimator:
             m_vals : NDArray
                 The corresponding mixing ratio values.
         """
-        n = len(data)
+        first_digits = self._prepare_first_digits(data)
+        n = len(first_digits)
+        counts = observed_frequencies(first_digits)
+        stat = self.statistic(counts=counts, expected_probs=self.benford_probs)
+
+        sim = self._prepare_simulation(n_replicas, n)
+
+        return estimate_mixture_ratio_from_simulation(
+            sim,
+            stat=stat,
+            n_samples=n,
+        )
+
+    def _prepare_simulation(self, n_replicas: int, n: int) -> pd.DataFrame:
+        """Ensure the simulation contains enough replicates for a given sample size.
+
+        If the current simulation is empty or contains fewer replicates than requested,
+        it generates additional simulations and appends them to the internal DataFrame.
+        Finally, it samples the requested number of replicates for use in estimation.
+
+        Parameters
+        ----------
+        n : int
+            The sample size of the data for which simulations are needed.
+        n_replicas : int
+            The number of simulation replicates required.
+
+        Returns:
+        -------
+        pd.DataFrame containing `n_replicas` simulations for the given sample size.
+        """
         if self.simulation.empty:
             difference = n_replicas
         else:
@@ -101,14 +142,55 @@ class BenfordMixtureEstimator:
                 mixing_ratios=self.mixing_ratios,
             )
             self.simulation = pd.concat([self.simulation, simulation])
-        sim = self.simulation.sample(n_replicas)
-        counts = observed_frequencies(data)
-        stat = self.statistic(counts=counts, expected_probs=self.benford_probs)
-        return estimate_mixture_ratio_from_simulation(
-            sim,
-            stat=stat,
-            n_samples=n,
-        )
+        return self.simulation.sample(n_replicas)
+
+    def _prepare_first_digits(self, data: NDArray) -> list[int]:
+        """Validate the input data and extract first significant digits.
+
+        Performs the following checks:
+        1. Ensures there are enough data points for meaningful estimation.
+        2. Ensures sufficient log-scale coverage.
+        3. Extracts first digits from each data point.
+        4. Optionally removes invalid entries (None) and issues a warning.
+
+        Parameters
+        ----------
+        data
+            The numeric dataset to analyze.
+
+        Returns:
+        -------
+        List[int]
+            List of valid first significant digits extracted from the data.
+
+        Raises:
+        ------
+        InsufficientDataError
+            If the data is too small or lacks log-scale coverage.
+        ValueError
+            If no valid digits could be extracted from the data.
+        """
+        if not has_sufficient_data(data, threshold=80):
+            msg = "Not enough data points to make meaningful estimates."
+            raise InsufficientDataError(msg)
+
+        if not has_sufficient_log_scale_coverage(data):
+            msg = "Insufficient log scale coverage."
+            raise InsufficientDataError(msg)
+
+        first_digits = [extract_significant_digits(ele) for ele in data]
+        if self.ignore_invalid:
+            invalid_count = sum(d is None for d in first_digits)
+            first_digits = [d for d in first_digits if d is not None]
+            if invalid_count > 0:
+                warnings.warn(
+                    f"{invalid_count} entries are considered invalid",
+                    UserWarning,
+                )
+        if not any(first_digits):
+            msg = "Unable to process some entries to digits"
+            raise ValueError(msg)
+        return [d for d in first_digits if d is not None]
 
     def plot(self) -> None:
         """Plot the estimated mixture ratio probability density.

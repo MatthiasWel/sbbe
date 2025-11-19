@@ -32,7 +32,8 @@ def test_single_sample_estimation(
         size=size,
         mix_ratio=true_ratio,
     )
-
+    rng = np.random.default_rng()
+    sample = sample * 10 ** rng.uniform(0, 5, size=len(sample))
     M_CI, probs, m_vals = estimator(sample, n_replicas=1000)
 
     # Basic output checks
@@ -57,7 +58,8 @@ def test_multiple_calls_same_sample(
         size=size,
         mix_ratio=true_ratio,
     )
-
+    rng = np.random.default_rng()
+    sample = sample * 10 ** rng.uniform(0, 5, size=len(sample))
     # First call
     M_CI1, probs1, m_vals1 = estimator(sample, n_replicas=1000)
     expected_rows1 = 1000 * len(mix_ratios)
@@ -91,6 +93,12 @@ def test_multiple_samples(estimator: BenfordMixtureEstimator, mix_ratios: NDArra
         size=size // 2,
         mix_ratio=true_ratio,
     )
+
+    rng1 = np.random.default_rng()
+    sample1 = sample1 * 10 ** rng1.uniform(0, 5, size=len(sample1))
+
+    rng2 = np.random.default_rng()
+    sample2 = sample2 * 10 ** rng2.uniform(0, 5, size=len(sample2))
 
     # Call with first sample
     estimator(sample1, n_replicas=1000)
