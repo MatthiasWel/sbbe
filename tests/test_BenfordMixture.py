@@ -34,7 +34,7 @@ def test_single_sample_estimation(
     )
     rng = np.random.default_rng()
     sample = sample * 10 ** rng.uniform(0, 5, size=len(sample))
-    M_CI, probs, m_vals = estimator(sample, n_replicas=1000)
+    _, probs, m_vals = estimator(sample, n_replicas=1000)
 
     # Basic output checks
     assert np.isclose(np.sum(probs), 1), "Probabilities should sum to 1"
@@ -61,17 +61,17 @@ def test_multiple_calls_same_sample(
     rng = np.random.default_rng()
     sample = sample * 10 ** rng.uniform(0, 5, size=len(sample))
     # First call
-    M_CI1, probs1, m_vals1 = estimator(sample, n_replicas=1000)
+    _ = estimator(sample, n_replicas=1000)
     expected_rows1 = 1000 * len(mix_ratios)
     assert len(estimator.simulation) == expected_rows1
 
     # Second call with larger n_replicas
-    M_CI2, probs2, m_vals2 = estimator(sample, n_replicas=2000)
+    _ = estimator(sample, n_replicas=2000)
     expected_rows2 = 2000 * len(mix_ratios)
     assert len(estimator.simulation) == expected_rows2
 
     # Third call with smaller n_replicas than available
-    M_CI3, probs3, m_vals3 = estimator(sample, n_replicas=1500)
+    _ = estimator(sample, n_replicas=1500)
     # Simulation should not increase
     assert len(estimator.simulation) == expected_rows2
 
