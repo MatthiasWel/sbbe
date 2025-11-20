@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import pytest
 from scipy.stats import rv_discrete
@@ -26,13 +27,16 @@ def test_make_multinomial_invalid_lengths():
     Ensure a ValueError is raised when outcomes
     and probabilities have mismatched lengths.
     """
-    with pytest.raises(ValueError, match="Length of outcomes and probs must match."):
+    with pytest.raises(
+        ValueError,
+        match=re.escape("Length of outcomes and probs must match."),
+    ):
         make_multinomial([1, 2], [0.5], random_state=0)
 
 
 def test_make_multinomial_probs_not_summing_to_one():
     """Ensure a ValueError is raised when probabilities do not sum to 1."""
-    with pytest.raises(ValueError, match="Probabilities must sum to 1."):
+    with pytest.raises(ValueError, match=re.escape("Probabilities must sum to 1.")):
         make_multinomial([1, 2, 3], [0.1, 0.2, 0.6], random_state=0)
 
 

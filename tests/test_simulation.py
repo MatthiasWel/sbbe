@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import pandas as pd
 import pytest
@@ -55,17 +56,23 @@ def test_sample_from_mixture_ratio_bounds():
 def test_sample_from_mixture_invalid_ratio():
     """Raise ValueError if mix_ratio is outside the range [0, 1]."""
     dist = make_multinomial([1, 2], [0.5, 0.5])
-    with pytest.raises(ValueError, match="mix_ratio must be between 0 and 1."):
+    with pytest.raises(
+        ValueError,
+        match=re.escape("mix_ratio must be between 0 and 1."),
+    ):
         sample_from_mixture(dist, dist, size=10, mix_ratio=-0.5)
 
-    with pytest.raises(ValueError, match="mix_ratio must be between 0 and 1."):
+    with pytest.raises(
+        ValueError,
+        match=re.escape("mix_ratio must be between 0 and 1."),
+    ):
         sample_from_mixture(dist, dist, size=10, mix_ratio=1.5)
 
 
 def test_sample_from_mixture_invalid_size():
     """Raise ValueError if sample size is negative."""
     dist = make_multinomial([1, 2], [0.5, 0.5])
-    with pytest.raises(ValueError, match="size must be non-negative."):
+    with pytest.raises(ValueError, match=re.escape("size must be non-negative.")):
         sample_from_mixture(dist, dist, size=-1, mix_ratio=0.5)
 
 
@@ -74,7 +81,7 @@ def test_sample_from_mixture_outcome_space_mismatch():
     dist1 = make_multinomial([1, 2], [0.5, 0.5])
     dist2 = make_multinomial([2, 3], [0.5, 0.5])
 
-    with pytest.raises(ValueError, match="different outcome spaces"):
+    with pytest.raises(ValueError, match=re.escape("different outcome spaces")):
         sample_from_mixture(dist1, dist2, size=10, mix_ratio=0.5)
 
 
@@ -110,13 +117,16 @@ def test_output_shapes(simulation_data: pd.DataFrame):
 def test_missing_columns():
     """Test ValueError for missing columns."""
     test = pd.DataFrame({"foo": [1], "bar": [2]})
-    with pytest.raises(ValueError, match="Simulation DataFrame must contain"):
+    with pytest.raises(
+        ValueError,
+        match=re.escape("Simulation DataFrame must contain"),
+    ):
         estimate_mixture_ratio_from_simulation(test, 0.0, 100)
 
 
 def test_no_matching_sample_size(simulation_data: pd.DataFrame):
     """Test if n_samples was not simulated."""
-    with pytest.raises(ValueError, match="No data found for n_samples"):
+    with pytest.raises(ValueError, match=re.escape("No data found for n_samples")):
         estimate_mixture_ratio_from_simulation(
             simulation_data,
             stat=1.0,
@@ -133,7 +143,7 @@ def test_insufficient_kde_data():
             "value": [1.0],  # only one data point for this mixing ratio
         },
     )
-    with pytest.raises(RuntimeError, match="No valid likelihood estimates"):
+    with pytest.raises(RuntimeError, match=re.escape("No valid likelihood estimates")):
         estimate_mixture_ratio_from_simulation(test, stat=1.0, n_samples=100)
 
 
