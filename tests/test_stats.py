@@ -61,3 +61,13 @@ def test_scalar_and_vector_alpha_consistency():
     assert np.isclose(bf1, bf2), (
         f"Expected same BF for scalar and vector alpha, got {bf1} vs {bf2}"
     )
+
+
+def test_handling_zero_prob():
+    """Expected probabilities of 0 are safely ignored in the likelihood."""
+    counts = np.array([5, 5, 5]) * 100
+    expected_probs = [1 / 3, 1 / 3, 0]
+    bf = bayes_factor_dirichlet_multinomial(counts, expected_probs, alpha=1.0)
+    assert np.isfinite(bf), (
+        "Zero expected probabilities should be handled without producing NaN."
+    )

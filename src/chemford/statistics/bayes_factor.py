@@ -34,7 +34,13 @@ def bayes_factor_dirichlet_multinomial(
 
     alpha_np = np.ones_like(counts) * alpha if np.isscalar(alpha) else np.array(alpha)
 
-    log_likelihood_H0 = np.sum(counts * np.log(expected_probs))
+    log_likelihood_H0 = np.sum(
+        [
+            c * np.log(p)
+            for c, p in zip(counts, expected_probs, strict=False)
+            if not np.isclose(p, 0)
+        ],
+    )
 
     # Closed form of log integral TODO: double check math
     log_marginal_H1 = (
