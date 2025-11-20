@@ -13,7 +13,8 @@ def estimate_mixture_ratio_from_simulation(
 
     Parameters:
     - simulation: DataFrame with columns ['n_samples', 'mixing_ratio', 'value']
-    - stat: Observed statistic
+    - stat: Observed statistic:
+            Note make sure that the statistic is the same as in the simulation
     - n_samples: Sample size for which the estimation is performed
     - ci_level: Confidence level for the credible interval (default 0.95)
 
@@ -50,7 +51,11 @@ def estimate_mixture_ratio_from_simulation(
     probs = np.array([likelihoods[m] for m in m_vals])
     probs_sum = probs.sum()
     if probs_sum == 0:
-        msg = "All likelihoods are zero. Check input Bayes factor or simulation data."
+        msg = (
+            "All likelihoods are zero. Simulation does not exhibit density in "
+            "the region of the observed statistic. Observed data likely not from"
+            "a mixture in the simulation."
+        )
         raise RuntimeError(msg)
 
     probs /= probs_sum
