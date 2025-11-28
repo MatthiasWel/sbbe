@@ -7,7 +7,7 @@ def bayes_factor_dirichlet_multinomial(
     counts: Iterable[int],
     expected_probs: Iterable[float],
     alpha: Iterable[float] | float = 1.0,
-) -> tuple[float, float]:
+) -> float:
     """Compute the log Bayes Factor comparing two models for observed count data.
 
     - H0: A multinomial model with fixed probabilities (`expected_probs`).
@@ -34,7 +34,13 @@ def bayes_factor_dirichlet_multinomial(
 
     alpha_np = np.ones_like(counts) * alpha if np.isscalar(alpha) else np.array(alpha)
 
-    log_likelihood_H0 = np.sum(counts * np.log(expected_probs))
+    log_likelihood_H0 = np.sum(
+        [
+            c * np.log(p)
+            for c, p in zip(counts, expected_probs, strict=False)
+            if not np.isclose(p, 0)
+        ],
+    )
 
     # Closed form of log integral TODO: double check math
     log_marginal_H1 = (
@@ -50,7 +56,7 @@ def bayes_factor_fixed_probas(
     counts: Iterable[int],
     expected_d1: Iterable[float],
     expected_d2: Iterable[float],
-) -> tuple[float, float]:
+) -> float:
     """Compute the log Bayes Factor comparing two fixed-probability multinomial models.
 
     - H0: A multinomial model with fixed probabilities (`expected_d1`).
