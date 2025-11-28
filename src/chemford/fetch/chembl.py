@@ -5,7 +5,8 @@ import pandas as pd
 CHEMBL_QUERY = """
 WITH valid_data AS (
     SELECT DISTINCT molregno, assay_id, standard_type, standard_value,
-           data_validity_comment, bao_endpoint AS bao_id, src_id, pchembl_value
+                    data_validity_comment, bao_endpoint AS bao_id, src_id,
+                    pchembl_value, record_id
     FROM activities
     WHERE standard_type IN ('Kd', 'Potency', 'AC50', 'IC50', 'Ki', 'EC50')
       AND standard_relation = '='
@@ -18,6 +19,7 @@ SELECT
     valid_data.standard_type,
     valid_data.standard_value,
     valid_data.data_validity_comment,
+    valid_data.record_id,
 
     assays.assay_id                     AS assay_id,
     assays.chembl_id                    AS assay_chembl_id,
@@ -37,6 +39,8 @@ SELECT
     assays.curated_by,
     assays.aidx,
     assays.assay_group,
+
+    curation_lookup.description         AS curation_description,
 
     target_dictionary.tid               AS target_id,
     target_dictionary.chembl_id         AS target_chembl_id,
@@ -63,15 +67,20 @@ SELECT
     docs.doi,
     docs.title,
     docs.doc_type,
-    docs.authors
+    docs.authors,
+
+    compound_records.compound_key
 
 FROM valid_data
 LEFT JOIN assays                        USING (assay_id)
+LEFT JOIN curation_lookup               USING (curated_by)
 LEFT JOIN target_dictionary             USING (tid)
 LEFT JOIN variant_sequences             USING (variant_id)
 LEFT JOIN source                        USING (src_id)
 LEFT JOIN bioassay_ontology             USING (bao_id)
-LEFT JOIN docs                          USING (doc_id);"""
+LEFT JOIN docs                          USING (doc_id)
+LEFT JOIN compound_records              USING (record_id)
+;"""
 
 
 def fetch_query_chembl(query: str, path_to_chembl: Path) -> pd.DataFrame:
