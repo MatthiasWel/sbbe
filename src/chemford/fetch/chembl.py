@@ -51,7 +51,6 @@ SELECT
     variant_sequences.variant_id,
     variant_sequences.accession         AS uniprot_accesion,
 
-    source.src_id                       AS src_id,
     source.src_description,
     source.src_comment,
     source.src_short_name,
