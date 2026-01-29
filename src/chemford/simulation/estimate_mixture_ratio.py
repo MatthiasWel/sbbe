@@ -63,6 +63,8 @@ def estimate_mixture_ratio_from_simulation(
     sorted_idx = np.argsort(probs)[::-1]
     cum_prob = np.cumsum(probs[sorted_idx])
     ci_mask = cum_prob <= ci_level
+    if not any(ci_mask):
+        ci_mask[0] = True
     ci_idx = sorted_idx[ci_mask]
     M_CI = m_vals[ci_idx]
 
