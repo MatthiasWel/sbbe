@@ -4,6 +4,7 @@ from typing import ClassVar
 import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
+from scipy.stats import beta
 from chemford.data_processing.benford_criteria import has_sufficient_data
 from chemford.data_processing.benford_criteria import has_sufficient_log_scale_coverage
 from chemford.data_processing.extract_significant_digit import (
@@ -52,6 +53,8 @@ class BenfordMixtureEstimator:
         statistic: str | Callable[..., float],
         mixing_ratios: NDArray | None = None,
         ignore_invalid: bool = False,
+        a: float = 1,
+        b: float = 1,
     ):
         """Initialize a BenfordMixtureEstimator.
 
@@ -74,6 +77,7 @@ class BenfordMixtureEstimator:
         self.benford = make_benford()
         self.benford_probs = self.benford.pk
         self.ignore_invalid = ignore_invalid
+        self.prior = beta(a, b)
 
     def __call__(self, data: NDArray, n_replicas: int = 1000):
         """Estimate the Benford-uniform mixture ratio for the given dataset.
@@ -106,6 +110,7 @@ class BenfordMixtureEstimator:
             sim,
             stat=stat,
             n_samples=n,
+            prior=self.prior,
         )
 
     def _prepare_simulation(self, n_replicas: int, n: int) -> pd.DataFrame:
