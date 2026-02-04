@@ -12,7 +12,7 @@ def estimate_mixture_ratio_from_simulation(
     stat: float,
     n_samples: int,
     prior: PriorPDF | None = None,
-    ci_level: float = 0.95,
+    hdi_level: float = 0.95,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Estimate the posterior from simulation data.
 
@@ -21,10 +21,10 @@ def estimate_mixture_ratio_from_simulation(
     - stat: Observed statistic:
             Note make sure that the statistic is the same as in the simulation
     - n_samples: Sample size for which the estimation is performed
-    - ci_level: Confidence level for the credible interval (default 0.95)
+    - hdi_level: Confidence level for the credible interval (default 0.95)
 
     Returns:
-    - M_CI: Array of mixing ratios within the credible interval
+    - M_hdi: Array of mixing ratios within the credible interval
     - probs: Posterior probabilities for each mixture ratio
     - m_vals: Corresponding mixing ratio values
     """
@@ -59,13 +59,13 @@ def estimate_mixture_ratio_from_simulation(
 
     sorted_idx = np.argsort(probs)[::-1]
     cum_prob = np.cumsum(probs[sorted_idx])
-    ci_mask = cum_prob <= ci_level
-    if not any(ci_mask):
-        ci_mask[0] = True
-    ci_idx = sorted_idx[ci_mask]
-    M_CI = m_vals[ci_idx]
+    hdi_mask = cum_prob <= hdi_level
+    if not any(hdi_mask):
+        hdi_mask[0] = True
+    hdi_idx = sorted_idx[hdi_mask]
+    M_hdi = m_vals[hdi_idx]
 
-    return M_CI, probs, m_vals
+    return M_hdi, probs, m_vals
 
 
 def calculate_likelihoods(stat: float, df_sub: pd.DataFrame) -> dict[float, float]:
