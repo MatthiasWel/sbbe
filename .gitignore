@@ -5,6 +5,9 @@
 *.out
 *.png
 *.svg
+*notebook*
+*scripts*
+*legacy*
 
 # Byte-compiled / optimized / DLL files
 *.py[cod]
