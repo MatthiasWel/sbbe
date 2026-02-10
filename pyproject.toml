@@ -57,8 +57,8 @@ publishing = [
 ]
 
 [project.urls]
-Repository = "https://github.com/MatthiasWel/chemford"
-Issues = "https://github.com/MatthiasWel/chemford/issues"
+Repository = "https://github.com/MatthiasWel/sbbe"
+Issues = "https://github.com/MatthiasWel/sbbe/issues"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -66,7 +66,7 @@ testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["src/chemford"]
+source = ["src/sbbe"]
 command_line = "-m pytest"
 
 [tool.tox]
@@ -126,7 +126,7 @@ pydocstyle.convention = "google"
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["chemford"]
+known-first-party = ["sbbe"]
 force-single-line = true
 no-lines-before = ["future","standard-library","third-party","first-party","local-folder"]
 
@@ -134,7 +134,7 @@ no-lines-before = ["future","standard-library","third-party","first-party","loca
 current_version = "0.1.0"
 
 [[tool.bumpversion.files]]
-filename = "src/chemford/__init__.py"
+filename = "src/sbbe/__init__.py"
 
 [[tool.bumpversion.files]]
 filename = "pyproject.toml"
