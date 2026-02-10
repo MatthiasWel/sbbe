@@ -5,6 +5,7 @@
 *.out
 *.png
 *.svg
+!assets/workflow.svg
 *notebook*
 *scripts*
 *legacy*
