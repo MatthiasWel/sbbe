@@ -21,7 +21,7 @@ full_name: Matthias Welsch
 github_organization: MatthiasWel
 keywords: Benford's law, IC50, bioactivity
 license: MIT
-package_name: chemford
+package_name: sbbe
 package_short_description: Utilizing Benford's law to spot inconsistencies in bioactivity
     data
 template_profile: recommended

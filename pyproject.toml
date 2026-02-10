@@ -27,7 +27,7 @@ dependencies = [
 description = "Utilizing Benford's law to spot inconsistencies in bioactivity data"
 keywords = ["Benford's law"," IC50"," bioactivity"]
 license = {file = "LICENSE"}
-name = "chemford"
+name = "sbbe"
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.12"
 version = "0.1.0"

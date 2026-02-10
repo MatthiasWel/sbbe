@@ -1,7 +1,7 @@
 # YAML 1.2
 ---
 cff-version: "1.2.0"
-title: "chemford"
+title: "sbbe"
 authors:
   - family-names: Welsch
     given-names: Matthias
@@ -11,7 +11,7 @@ authors:
     orcid: "https://orcid.org/0009-0007-1146-6585"
 date-released: 2025-05-15
 version: "0.1.0"
-repository-code: "https://github.com/MatthiasWel/chemford"
+repository-code: "https://github.com/MatthiasWel/sbbe"
 keywords:
   - "Benford's law"
   - " IC50"

@@ -1,4 +1,4 @@
-name: chemford
+name: sbbe
 channels:
   - conda-forge
 dependencies:
