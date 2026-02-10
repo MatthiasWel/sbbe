@@ -1,0 +1,3 @@
+from sbbe.distributions.make_general_multinomial import make_multinomial
+from sbbe.distributions.make_multinomial_benford import make_benford
+from sbbe.distributions.make_multinomial_uniform import make_uniform

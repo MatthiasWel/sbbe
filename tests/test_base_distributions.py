@@ -1,10 +1,10 @@
-from chemford.distributions.benford import benford_first_digit_distribution
-from chemford.distributions.benford import benford_first_two_digit_distribution
-from chemford.distributions.benford import benford_n_digit_distribution
-from chemford.distributions.rounded_distributions import (
+from sbbe.distributions.benford import benford_first_digit_distribution
+from sbbe.distributions.benford import benford_first_two_digit_distribution
+from sbbe.distributions.benford import benford_n_digit_distribution
+from sbbe.distributions.rounded_distributions import (
     empirical_distribution_round_to_one_significant_digit,
 )
-from chemford.distributions.rounded_distributions import (
+from sbbe.distributions.rounded_distributions import (
     empirical_distribution_round_to_step_0_05,
 )
 

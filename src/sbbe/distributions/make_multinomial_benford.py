@@ -1,7 +1,7 @@
 from numpy.random import Generator
 from scipy.stats import rv_discrete
-from chemford.distributions.benford import benford_first_digit_distribution
-from chemford.distributions.make_general_multinomial import make_multinomial
+from sbbe.distributions.benford import benford_first_digit_distribution
+from sbbe.distributions.make_general_multinomial import make_multinomial
 
 
 def make_benford(random_state: int | Generator | None = None) -> rv_discrete:

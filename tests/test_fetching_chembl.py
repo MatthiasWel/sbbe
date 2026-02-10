@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from chemford.fetch.chembl import fetch_data_chembl
+from sbbe.fetch.chembl import fetch_data_chembl
 
 PATH_TO_CHEMBL = Path("/data/shared/exchange/uashehab/chembl35/chembl_35.db")
 

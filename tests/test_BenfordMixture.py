@@ -1,10 +1,10 @@
 import numpy as np
 import pytest
 from numpy.typing import NDArray
-from chemford.benford_mixture import BenfordMixtureEstimator
-from chemford.distributions import make_benford
-from chemford.distributions import make_uniform
-from chemford.simulation.sample_from_mixture import sample_from_mixture
+from sbbe.benford_mixture import BenfordMixtureEstimator
+from sbbe.distributions import make_benford
+from sbbe.distributions import make_uniform
+from sbbe.simulation.sample_from_mixture import sample_from_mixture
 
 
 @pytest.fixture

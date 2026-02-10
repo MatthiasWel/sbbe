@@ -4,11 +4,11 @@ import pandas as pd
 from joblib import Parallel
 from joblib import delayed
 from tqdm import tqdm
-from chemford.data_processing.observed_frequencies import observed_frequencies
-from chemford.distributions import make_benford
-from chemford.distributions import make_uniform
-from chemford.distributions.benford import benford_first_digit_distribution
-from chemford.simulation.sample_from_mixture import sample_from_mixture
+from sbbe.data_processing.observed_frequencies import observed_frequencies
+from sbbe.distributions import make_benford
+from sbbe.distributions import make_uniform
+from sbbe.distributions.benford import benford_first_digit_distribution
+from sbbe.simulation.sample_from_mixture import sample_from_mixture
 
 
 def simulate_single_replica(

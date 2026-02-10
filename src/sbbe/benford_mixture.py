@@ -5,25 +5,25 @@ import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
 from scipy.stats import beta
-from chemford.data_processing.benford_criteria import has_sufficient_data
-from chemford.data_processing.benford_criteria import has_sufficient_log_scale_coverage
-from chemford.data_processing.extract_significant_digit import (
+from sbbe.data_processing.benford_criteria import has_sufficient_data
+from sbbe.data_processing.benford_criteria import has_sufficient_log_scale_coverage
+from sbbe.data_processing.extract_significant_digit import (
     extract_significant_digits,
 )
-from chemford.data_processing.observed_frequencies import observed_frequencies
-from chemford.distributions import make_benford
-from chemford.simulation.estimate_mixture_ratio import (
+from sbbe.data_processing.observed_frequencies import observed_frequencies
+from sbbe.distributions import make_benford
+from sbbe.simulation.estimate_mixture_ratio import (
     estimate_mixture_ratio_from_simulation,
 )
-from chemford.simulation.simulate_mixture import simulate_benford_and_uniform_mixture
-from chemford.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
-from chemford.statistics.edf_tests import ks_d
-from chemford.statistics.edf_tests import kuipers_v
-from chemford.statistics.specialized_statistics import euclidean_distance_cho_gains
-from chemford.statistics.specialized_statistics import max_l1_distance_leemis
-from chemford.statistics.specialized_statistics import max_l1_distance_morrow
-from chemford.statistics.xi_squared import xi_squared_counts
-from chemford.statistics.xi_squared import xi_squared_proportions
+from sbbe.simulation.simulate_mixture import simulate_benford_and_uniform_mixture
+from sbbe.statistics.bayes_factor import bayes_factor_dirichlet_multinomial
+from sbbe.statistics.edf_tests import ks_d
+from sbbe.statistics.edf_tests import kuipers_v
+from sbbe.statistics.specialized_statistics import euclidean_distance_cho_gains
+from sbbe.statistics.specialized_statistics import max_l1_distance_leemis
+from sbbe.statistics.specialized_statistics import max_l1_distance_morrow
+from sbbe.statistics.xi_squared import xi_squared_counts
+from sbbe.statistics.xi_squared import xi_squared_proportions
 
 
 class InsufficientDataError(Exception):

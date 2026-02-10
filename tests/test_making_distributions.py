@@ -2,9 +2,9 @@ import re
 import numpy as np
 import pytest
 from scipy.stats import rv_discrete
-from chemford.distributions import make_benford
-from chemford.distributions import make_multinomial
-from chemford.distributions import make_uniform
+from sbbe.distributions import make_benford
+from sbbe.distributions import make_multinomial
+from sbbe.distributions import make_uniform
 
 
 def test_make_multinomial_basic():

@@ -1,6 +1,6 @@
 from numpy.random import Generator
 from scipy.stats import rv_discrete
-from chemford.distributions.make_general_multinomial import make_multinomial
+from sbbe.distributions.make_general_multinomial import make_multinomial
 
 
 def make_uniform(random_state: int | Generator | None = None) -> rv_discrete:
