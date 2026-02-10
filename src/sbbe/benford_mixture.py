@@ -197,7 +197,7 @@ class BenfordMixtureEstimator:
             raise ValueError(msg)
         return [d for d in first_digits if d is not None]
 
-    def plot(self) -> None:
+    def visualize(self, data) -> None:
         """Plot the estimated mixture ratio probability density.
 
         Raises:
@@ -205,4 +205,5 @@ class BenfordMixtureEstimator:
         NotImplementedError
             This method is not implemented yet.
         """
+        M_hdi, probs, m_vals = self(data)
         raise NotImplementedError
