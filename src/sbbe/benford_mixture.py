@@ -1,17 +1,17 @@
 import warnings
 from collections.abc import Callable
 from typing import ClassVar
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from numpy.typing import NDArray
 from scipy.stats import beta
 from sbbe.data_processing.benford_criteria import has_sufficient_data
 from sbbe.data_processing.benford_criteria import has_sufficient_log_scale_coverage
-from sbbe.data_processing.extract_significant_digit import (
-    extract_significant_digits,
-)
+from sbbe.data_processing.extract_significant_digit import extract_significant_digits
 from sbbe.data_processing.observed_frequencies import observed_frequencies
 from sbbe.distributions import make_benford
+from sbbe.distributions.benford import benford_first_digit_distribution
 from sbbe.simulation.estimate_mixture_ratio import (
     estimate_mixture_ratio_from_simulation,
 )
@@ -197,13 +197,66 @@ class BenfordMixtureEstimator:
             raise ValueError(msg)
         return [d for d in first_digits if d is not None]
 
-    def visualize(self, data) -> None:
-        """Plot the estimated mixture ratio probability density.
+    def visualize(self, data: NDArray) -> None:
+        """Plot the FSD distribution and Estimated Benfordness (SBBE).
 
-        Raises:
-        ------
-        NotImplementedError
-            This method is not implemented yet.
+        Parameters
+        ----------
+        data: numeric dataset.
+
+        Returns:
+        -------
+        None
         """
         M_hdi, probs, m_vals = self(data)
-        raise NotImplementedError
+        first_digits = self._prepare_first_digits(data)
+        counts = observed_frequencies(first_digits)
+        fig, ax = plt.subplots(1, 2, figsize=(10, 4), dpi=300)
+        ax[0].bar(
+            range(1, 10),
+            counts,
+            color="darkblue",
+            alpha=0.8,
+            width=0.8,
+            label=f"Observed (n={len(data):,})",
+        )
+        ax[0].plot(
+            range(1, 10),
+            [i * len(data) for i in list(benford_first_digit_distribution().values())],
+            color="darkred",
+            alpha=0.8,
+            linewidth=2,
+            marker="o",
+            label="Benford's law",
+        )
+        ax[0].grid(True, alpha=0.3, linestyle=":")
+        ax[0].legend()
+        ax[0].set_xticks(range(1, 10))
+        ax[0].set_xlabel("First significant digit")
+        ax[0].set_ylabel("Count")
+        ax[0].set_title("Distribution of first significant digits")
+        ax[1].plot(m_vals, probs, color="darkblue", alpha=0.8, linewidth=2)
+        m_vals_step = 0.02
+        ax[1].axvspan(
+            max(M_hdi) + m_vals_step,
+            min(M_hdi) - m_vals_step,
+            color="darkblue",
+            alpha=0.2,
+            label="95% Highest density interval",
+        )
+        ax[1].axvline(
+            x=m_vals[np.argmax(probs)],
+            color="darkgreen",
+            linestyle="--",
+            linewidth=2,
+            label=f"Estimated Benfordness: {m_vals[np.argmax(probs)]:.2f}",
+        )
+        ax[1].grid(True, alpha=0.3, linestyle=":")
+        ax[1].set_xlabel("Benfordness")
+        ax[1].set_ylabel("Density")
+        ax[1].set_title("SBBE Benfordness Estimation")
+        ax[1].set_xlim(0, 1)
+        ax[1].set_ylim(0, 1)
+        ax[1].legend()
+        plt.tight_layout()
+        plt.show()
