@@ -211,7 +211,7 @@ class BenfordMixtureEstimator:
         M_hdi, probs, m_vals = self(data)
         first_digits = self._prepare_first_digits(data)
         counts = observed_frequencies(first_digits)
-        fig, ax = plt.subplots(1, 2, figsize=(10, 4), dpi=300)
+        _, ax = plt.subplots(1, 2, figsize=(10, 4), dpi=300)
         ax[0].bar(
             range(1, 10),
             counts,
