@@ -6,7 +6,7 @@ CHEMBL_QUERY = """
 WITH valid_data AS (
     SELECT DISTINCT molregno, assay_id, standard_type, standard_value,
                     data_validity_comment, bao_endpoint AS bao_id, src_id,
-                    pchembl_value, record_id
+                    pchembl_value, record_id, activity_comment
     FROM activities
     WHERE standard_type IN ('Kd', 'Potency', 'AC50', 'IC50', 'Ki', 'EC50')
       AND standard_relation = '='
@@ -20,6 +20,7 @@ SELECT
     valid_data.standard_value,
     valid_data.data_validity_comment,
     valid_data.record_id,
+    valid_data.activity_comment,
 
     assays.assay_id                     AS assay_id,
     assays.chembl_id                    AS assay_chembl_id,
