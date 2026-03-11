@@ -13,7 +13,7 @@ pip install .
 ## Basic functionality
 
 ```python
-from chemford.benford_mixture import BenfordMixtureEstimator
+from sbbe.benford_mixture import BenfordMixtureEstimator
 
 estimator = BenfordMixtureEstimator("log_BF")
 
