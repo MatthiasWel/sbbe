@@ -132,12 +132,14 @@ class BenfordMixtureEstimator:
         pd.DataFrame containing `n_replicas` simulations for the given sample size.
         """
         if self.simulation.empty:
-            difference = n_replicas
+            available_replicas = 0
         else:
-            available_replicas = len(
-                self.simulation[self.simulation.n_samples == n],
-            ) / len(self.mixing_ratios)
-            difference = int(n_replicas - available_replicas)
+            subset = self.simulation[self.simulation.n_samples == n]
+            available_replicas = subset["iteration"].nunique()
+
+        difference = n_replicas - available_replicas
+        print(difference)
+
         if difference > 0:
             # no enough replicates
             simulation = simulate_benford_and_uniform_mixture(
@@ -146,8 +148,25 @@ class BenfordMixtureEstimator:
                 sizes=[n],
                 mixing_ratios=self.mixing_ratios,
             )
-            self.simulation = pd.concat([self.simulation, simulation])
-        return self.simulation.sample(n_replicas)
+
+            start = (
+                0 if self.simulation.empty
+                else self.simulation["iteration"].max() + 1
+            )
+            simulation["iteration"] += start
+
+            self.simulation = pd.concat(
+                [self.simulation, simulation],
+                ignore_index=True,
+            )
+        
+        subset = self.simulation[self.simulation.n_samples == n]
+        iterations = np.random.choice(
+            subset["iteration"].unique(),
+            size=n_replicas,
+            replace=False,
+        )
+        return subset[subset["iteration"].isin(iterations)]
 
     def _prepare_first_digits(self, data: NDArray) -> list[int]:
         """Validate the input data and extract first significant digits.
