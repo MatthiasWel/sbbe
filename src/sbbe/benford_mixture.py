@@ -138,7 +138,6 @@ class BenfordMixtureEstimator:
             available_replicas = subset["iteration"].nunique()
 
         difference = n_replicas - available_replicas
-        print(difference)
 
         if difference > 0:
             # no enough replicates
@@ -150,8 +149,7 @@ class BenfordMixtureEstimator:
             )
 
             start = (
-                0 if self.simulation.empty
-                else self.simulation["iteration"].max() + 1
+                0 if self.simulation.empty else self.simulation["iteration"].max() + 1
             )
             simulation["iteration"] += start
 
@@ -159,9 +157,11 @@ class BenfordMixtureEstimator:
                 [self.simulation, simulation],
                 ignore_index=True,
             )
-        
+
         subset = self.simulation[self.simulation.n_samples == n]
-        iterations = np.random.choice(
+        rng = np.random.default_rng()
+
+        iterations = rng.choice(
             subset["iteration"].unique(),
             size=n_replicas,
             replace=False,
