@@ -211,7 +211,7 @@ class BenfordMixtureEstimator:
                     f"{invalid_count} entries are considered invalid",
                     UserWarning,
                 )
-        if not any(first_digits):
+        if not all(first_digits):
             msg = "Unable to process some entries to digits"
             raise ValueError(msg)
         return [d for d in first_digits if d is not None]
